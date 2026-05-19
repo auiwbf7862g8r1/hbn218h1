@@ -62,6 +62,10 @@
     <div id="configs" class="configs"></div>
   </div>
   <script>
+    // ============ دامنه جدید شما ============
+    const YOUR_CUSTOM_DOMAIN = "aghayskorn.dns.navy";
+    // ======================================
+
     const STATIC_IPS = ["63.141.252.203", "50.7.5.83", "94.130.50.12"];
     const LANGUAGES = ["en", "fa-IR"];
     const FALLBACK_STRINGS = {
@@ -139,10 +143,16 @@
     }
 
     function getConfigs() {
-      const name = extractCodespaceName(window.location.hostname);
-      const domain = name ? `${name}-443.app.github.dev` : "YOUR-CODESPACE-NAME-443.app.github.dev";
+      // استفاده از دامنه سفارشی شما
+      const domain = YOUR_CUSTOM_DOMAIN && YOUR_CUSTOM_DOMAIN !== "__YOUR_DOMAIN__" 
+          ? YOUR_CUSTOM_DOMAIN 
+          : (() => {
+              const name = extractCodespaceName(window.location.hostname);
+              return name ? `${name}-443.app.github.dev` : "YOUR-CODESPACE-NAME-443.app.github.dev";
+            })();
+
       const configs = [
-        { label: "Domain", host: domain, link: buildLink(domain, 443, domain) },
+        { label: `Domain (${domain})`, host: domain, link: buildLink(domain, 443, domain) },
         ...STATIC_IPS.map((ip) => ({ label: `IP ${ip}`, host: ip, link: buildLink(ip, 443, domain) }))
       ];
 
